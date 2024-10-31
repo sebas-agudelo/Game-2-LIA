@@ -1,0 +1,86 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('trees-8136806_1920.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+
+    width: 90vw; /* Använd en procentuell bredd för att göra den responsiv */
+    max-width: 550px;
+
+    height: 90vw; /* Samma som bredd för att behålla kvadratiskt förhållande */
+    max-height: 550px;
+    
+    border: 1px solid #000;
+    position: relative;
+}
+
+.cell {
+    border: 1px solid #ccc;
+}
+
+.joystick {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stick {
+    width: 40px;
+    height: 40px;
+    background-color: #888;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.circle {
+    position: absolute;
+    width: 40px; /* Diameter */
+    height: 40px; /* Diameter */
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 2px solid #000;
+    border-radius: 50%;
+    pointer-events: none; /* Cirkeln ska inte påverka muspekaren */
+}
+
+.game-mode-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.game-mode-container #timeSpan {
+    font-size: 3rem;
+}
+
+.game-mode-container #scoreSpan {
+    font-size: 3rem;
+}
