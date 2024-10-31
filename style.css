@@ -43,7 +43,8 @@ body {
 .joystick {
     position: absolute;
     bottom: 20px;
-    left: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100px;
     height: 100px;
     background-color: #ccc;
