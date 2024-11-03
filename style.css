@@ -21,6 +21,15 @@ body {
     background-size: cover;
 }
 
+.game-setup-wrapper{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -34,6 +43,10 @@ body {
     
     border: 1px solid #000;
     position: relative;
+    /* position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -0%); */
 }
 
 .cell {
@@ -41,10 +54,10 @@ body {
 }
 
 .joystick {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    /* position: absolute; */
+    /* bottom: 20px;
+    left: 50%; */
+    /* transform: translateX(-50%); */
     width: 100px;
     height: 100px;
     background-color: #ccc;
@@ -64,11 +77,13 @@ body {
 
 .circle {
     position: absolute;
-    width: 40px; /* Diameter */
-    height: 40px; /* Diameter */
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 2px solid #000;
-    border-radius: 50%;
+    width: 70px; /* Diameter */
+    height: 70px; /* Diameter */
+    /* background-color: rgba(255, 255, 255, 0.5); */
+    background-image: url('tractor-cartoon-style-stiker-white-background-isolated-transparent-png-logo-generative-ai-277311887.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     pointer-events: none; /* Cirkeln ska inte påverka muspekaren */
 }
 
@@ -80,8 +95,10 @@ body {
 
 .game-mode-container #timeSpan {
     font-size: 3rem;
+    color: #ffffff;
 }
 
 .game-mode-container #scoreSpan {
     font-size: 3rem;
+    color: #ffffff;
 }

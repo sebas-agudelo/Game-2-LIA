@@ -91,7 +91,7 @@ function clearColorAtPosition(x, y) {
         if (!clearedCells[gridY][gridX]) {
             cell.style.backgroundColor = '#ffffff'; // Sätt cellens färg till vit
             clearedCells[gridY][gridX] = true; // Markera cellen som rensad
-            // collectPoints(); // Lägg till poäng
+            collectPoints(); // Lägg till poäng
         }
     }
 }
@@ -157,7 +157,7 @@ function handleJoystickMovement(clientX, clientY) {
     circle.style.top = `${circleY}px`;
 
     clearColorAtPosition(circleX + circle.offsetWidth / 2, circleY + circle.offsetHeight / 2);
-    // startCountdown()  // Kommentera bort om du bara vill ha countdown en gång
+    startCountdown()  // Kommentera bort om du bara vill ha countdown en gång
 }
 
 
