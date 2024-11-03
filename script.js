@@ -43,16 +43,41 @@ function collectPoints() {
 }
 
 // Generera färger i grid
+// Generera celler med bakgrundsbild och slumpmässig majsbild
 for (let i = 0; i < gridSize; i++) {
-    colors[i] = [];
     for (let j = 0; j < gridSize; j++) {
-        colors[i][j] = getRandomColor();
         const cell = document.createElement('div');
         cell.className = 'cell';
-        cell.style.backgroundColor = colors[i][j];
+
+        // Ställ in bakgrundsbild för cellen
+        cell.style.backgroundImage = "url('gräns.jpg')"; // Bakgrundsbilden för cellerna
+        cell.style.backgroundSize = 'cover'; // Se till att bilden täcker hela cellen
+
+        // Lägg till cellen i grid-elementet
         gridElement.appendChild(cell);
     }
 }
+
+// Funktion för att generera en slumpmässig majsbild i en tom cell
+function generateRandomCornImage() {
+    let randomX, randomY;
+    do {
+        randomX = Math.floor(Math.random() * gridSize);
+        randomY = Math.floor(Math.random() * gridSize);
+    } while (clearedCells[randomY][randomX]); // Försäkra att bilden visas i en cell som inte är rensad
+
+    const cellIndex = randomY * gridSize + randomX;
+    const cell = gridElement.children[cellIndex];
+
+    // Skapa en img-tag för majsbilden
+    const img = document.createElement('img');
+    img.src = 'vvvv.png';
+    img.className = 'img';
+
+    cell.appendChild(img); // Lägg till majsbilden
+}
+
+generateRandomCornImage();
 
 const cellSize = gridElement.offsetWidth / gridSize;
 
@@ -75,7 +100,6 @@ circle.style.left = `${circleX}px`;
 circle.style.top = `${circleY}px`;
 
 
-// Function to clear color based on circle's new position
 function clearColorAtPosition(x, y) {
     const gridRect = gridElement.getBoundingClientRect();
     const adjustedX = x - gridRect.left;
@@ -89,12 +113,21 @@ function clearColorAtPosition(x, y) {
         const cell = gridElement.children[cellIndex];
 
         if (!clearedCells[gridY][gridX]) {
-            cell.style.backgroundColor = '#ffffff'; // Sätt cellens färg till vit
+            cell.style.backgroundColor = '#ffffff'; // Sätt cellens färg till vit (eller rensa bakgrunden om du vill)
+
+           // Ta bort majsbilden om den finns
+           const img = cell.querySelector('img');
+           if (img) {
+               cell.removeChild(img);
+               generateRandomCornImage(); // Skapa en ny majsbild när den föregående tas bort
+           }
+
             clearedCells[gridY][gridX] = true; // Markera cellen som rensad
             collectPoints(); // Lägg till poäng
         }
     }
 }
+
 
 // Joystick funktionalitet
 let isDragging = false;
