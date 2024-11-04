@@ -46,14 +46,24 @@ body {
 }
 
 .cell {
-  border: 1px solid #ccc;
-  background: transparent;
-}
-
-.cell img {
+  position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden; /* Förhindra att innehållet överskrider cellens gränser */
+  background-size: cover;
+  border: 1px solid gray;
 }
+
+.cell .img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Behåll proportionerna och passa in i cellen */
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Gör att majsbilden inte påverkar interaktionen */
+}
+
 
 .joystick {
   width: 100px;
@@ -75,14 +85,15 @@ body {
 
 .circle {
   position: absolute;
-  width: 70px; /* Diameter */
-  height: 70px; /* Diameter */
+  width: 65px; /* Diameter */
+  height: 65px; /* Diameter */
   /* background-color: rgba(255, 255, 255, 0.5); */
   background-image: url("tractor-cartoon-style-stiker-white-background-isolated-transparent-png-logo-generative-ai-277311887.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   pointer-events: none; /* Cirkeln ska inte påverka muspekaren */
+  transition: transform 0.1s; /* Gör rotationen smidig */
 }
 
 .game-mode-container {
@@ -117,7 +128,11 @@ body {
   font-style: normal;
 }
 
+
 @media screen and (min-width: 768px) {
 
+    button{
+        color: #dbcf89;
+    }
     
 }
