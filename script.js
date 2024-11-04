@@ -23,7 +23,7 @@ function startCountdown() {
 
   countdownInterval = setInterval(() => {
     limitedTime--; 
-    timeSpan.innerHTML = `${limitedTime} sec`;
+    timeSpan.innerHTML = `${limitedTime}S`;
 
     if (limitedTime <= gameOver) {
       clearInterval(countdownInterval); 
@@ -35,7 +35,7 @@ function startCountdown() {
 
 function collectPoints() {
     score += 1;
-    scoreSpan.innerHTML = `${score} points`;
+    scoreSpan.innerHTML = `${score}P`;
     if (score >= goals) {
         alert('GRATTIS!!!');
         location.reload();
