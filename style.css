@@ -1,111 +1,123 @@
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100dvh;
-    margin: 0;
-    background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  margin: 0;
+  background-color: #f0f0f0;
 }
 
 .game-container {
-    position: relative;
-    width: 100%;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-image: url('farm-4778011_1280.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url("farm-4778011_1280.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.game-setup-wrapper{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.game-setup-wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
 
-    width: 90vw; /* Använd en procentuell bredd för att göra den responsiv */
-    max-width: 550px;
+  width: 100vw;
+  max-width: 450px;
 
-    height: 90vw; /* Samma som bredd för att behålla kvadratiskt förhållande */
-    max-height: 550px;
-    
-    border: 1px solid #000;
-    position: relative;
-    /* position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -0%); */
+  height: 100vw;
+  max-height: 450px;
+
+  border: 1px solid #000;
+  position: relative;
 }
 
 .cell {
-    border: 1px solid #ccc;
-    background: transparent;
+  border: 1px solid #ccc;
+  background: transparent;
 }
 
 .cell img {
-    width: 100%;
-    height: 100%;
-    z-index: -999;
+  width: 100%;
+  height: 100%;
 }
 
 .joystick {
-    /* position: absolute; */
-    /* bottom: 20px;
-    left: 50%; */
-    /* transform: translateX(-50%); */
-    width: 100px;
-    height: 100px;
-    background-color: #ccc;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .stick {
-    width: 40px;
-    height: 40px;
-    background-color: #888;
-    border-radius: 50%;
-    cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background-color: #888;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .circle {
-    position: absolute;
-    width: 70px; /* Diameter */
-    height: 70px; /* Diameter */
-    /* background-color: rgba(255, 255, 255, 0.5); */
-    background-image: url('tractor-cartoon-style-stiker-white-background-isolated-transparent-png-logo-generative-ai-277311887.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    pointer-events: none; /* Cirkeln ska inte påverka muspekaren */
+  position: absolute;
+  width: 70px; /* Diameter */
+  height: 70px; /* Diameter */
+  /* background-color: rgba(255, 255, 255, 0.5); */
+  background-image: url("tractor-cartoon-style-stiker-white-background-isolated-transparent-png-logo-generative-ai-277311887.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none; /* Cirkeln ska inte påverka muspekaren */
 }
 
 .game-mode-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+  width: 100vw;
+  max-width: 450px;
+  height: 120px;
+  max-height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.game-mode-container #timeSpan {
-    font-size: 3rem;
-    color: #ffffff;
+.game-mode-container .time-wrapper,
+.game-mode-container .score-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
 }
 
-.game-mode-container #scoreSpan {
-    font-size: 3rem;
-    color: #ffffff;
+.game-mode-container .time-wrapper img,
+.game-mode-container .score-wrapper img {
+  width: 43px;
+  margin: 0 15px 0 0;
+}
+
+.time-wrapper #timeSpan,
+.score-wrapper #scoreSpan {
+  color: #ff0000;
+  font-size: 1.5rem;
+  font-family: "Spicy Rice", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@media screen and (min-width: 768px) {
+
+    
 }

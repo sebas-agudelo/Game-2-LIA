@@ -1,7 +1,7 @@
 const gridElement = document.getElementById('grid');
 const joystick = document.getElementById('joystick');
 const circle = document.getElementById('circle');
-const gridSize = 5;
+const gridSize = 10;
 const colors = [];
 
 const timeSpan = document.getElementById('timeSpan');
@@ -13,8 +13,8 @@ let limitedTime = 39;
 const gameOver = 0;
 let clearedCells = Array.from({ length: gridSize }, () => Array(gridSize).fill(false));
 
-// timeSpan.innerHTML = `${limitedTime} sec`;
-// scoreSpan.innerHTML = `${score} points`;
+timeSpan.innerHTML = `${limitedTime}S`;
+scoreSpan.innerHTML = `${score}P`;
 
 let countdownInterval; 
 
