@@ -131,26 +131,31 @@ function clearColorAtPosition(x, y) {
     }
 }
 
-// Joystick funktionalitet
 let isDragging = false;
+let movementInterval; // Intervall för att uppdatera rörelsen kontinuerligt
+let joystickSpeed = 0.1; // Hastigheten på rörelsen, kan justeras för att göra det snabbare
 
 joystick.addEventListener('mousedown', (e) => {
     isDragging = true;
+    startMovement();  // Starta kontinuerlig rörelse
 });
 
 joystick.addEventListener('touchstart', (e) => {
     isDragging = true;
     e.preventDefault(); // Förhindra scrollning
+    startMovement();  // Starta kontinuerlig rörelse
 });
 
 document.addEventListener('mouseup', () => {
     isDragging = false;
     joystick.style.transform = 'translate(0, 0)';
+    stopMovement();  // Stoppa kontinuerlig rörelse
 });
 
 document.addEventListener('touchend', () => {
     isDragging = false;
     joystick.style.transform = 'translate(0, 0)';
+    stopMovement();  // Stoppa kontinuerlig rörelse
 });
 
 document.addEventListener('mousemove', (e) => {
@@ -165,17 +170,15 @@ document.addEventListener('touchmove', (e) => {
     }
 }, { passive: false });
 
-
-// För att definiera hur mycket traktorn ska rotera per rörelse (i grader)
-const rotationStep = 90; // 90 grader per rörelse (en kvart rotation per gång)
-let currentRotation = 0; // Variabel för att hålla koll på den nuvarande rotationen
+let joystickX = 0;
+let joystickY = 0;
 
 function handleJoystickMovement(clientX, clientY) {
     const joystickRect = joystick.getBoundingClientRect();
     let x = clientX - joystickRect.left - joystickRect.width / 2;
     let y = clientY - joystickRect.top - joystickRect.height / 2;
 
-    // Beräkna joystickens riktning (vinkel) från mitten
+    // Beräkna rörelsens avstånd
     const distance = Math.sqrt(x * x + y * y);
     if (distance > 30) {
         x = (x / distance) * 30;
@@ -184,52 +187,48 @@ function handleJoystickMovement(clientX, clientY) {
 
     joystick.style.transform = `translate(${x}px, ${y}px)`;
 
-    // Variabel för att hålla riktningen på rotationen (uppåt, nedåt, vänster, höger)
-    let newRotation = currentRotation;
+    // Uppdatera joystickens koordinater med en högre hastighet
+    joystickX = x * joystickSpeed;  
+    joystickY = y * joystickSpeed;
+}
 
-    // Om rörelsen är mer horisontell (vänster/höger), rotera åt vänster eller höger
-    if (Math.abs(x) > Math.abs(y)) {
-        if (x > 0) {
-            newRotation = 90;  // Höger
-        } else {
-            newRotation = -90; // Vänster
+// Starta kontinuerlig rörelse
+function startMovement() {
+    if (movementInterval) return; // Förhindra flera intervall
+
+    movementInterval = setInterval(() => {
+        if (isDragging) {
+            moveCircle();  // Uppdatera traktorns position
         }
-    } 
-    // Om rörelsen är mer vertikal (uppåt/nedåt), rotera uppåt eller nedåt
-    else {
-        if (y > 0) {
-            newRotation = 180;  // Nedåt
-        } else {
-            newRotation = 0; // Uppåt (stående)
-        }
-    }
+    }, 20);  // Uppdatera rörelsen mycket snabbare (var 20 millisekund)
+}
 
-    // Uppdatera rotationen endast om den har ändrats
-    if (newRotation !== currentRotation) {
-        currentRotation = newRotation;
-        // Roterar traktorn baserat på den nuvarande rotationen
-        circle.style.transform = `rotate(${currentRotation}deg)`;
-    }
+// Stoppa kontinuerlig rörelse
+function stopMovement() {
+    clearInterval(movementInterval);
+    movementInterval = null;
+}
 
-    // Uppdatera traktorns position baserat på joystickens rörelse
-    circleX += x / 10;
-    circleY += y / 10;
-
-    // Håll traktorn inom gridens gränser
+function moveCircle() {
     const gridRect = gridElement.getBoundingClientRect();
+
+    // Uppdatera cirkelns position
+    circleX += joystickX;
+    circleY += joystickY;
+
+    // Begränsa rörelsen inom gränserna
     circleX = Math.max(gridRect.left, Math.min(circleX, gridRect.right - circle.offsetWidth));
     circleY = Math.max(gridRect.top, Math.min(circleY, gridRect.bottom - circle.offsetHeight));
 
-    // Använd den uppdaterade positionen för traktorn
+    // Uppdatera cirkelns position
     circle.style.left = `${circleX}px`;
     circle.style.top = `${circleY}px`;
 
-    // Rensa cellen vid den nya positionen (om traktorn har rört sig över den)
+    // Kontrollera om cirkeln är inom cellen
     clearColorAtPosition(circleX + circle.offsetWidth / 2, circleY + circle.offsetHeight / 2);
-
-    // Starta nedräkningen (om det inte redan är igång)
-    startCountdown();  // Kommentera bort om du bara vill ha countdown en gång
+    startCountdown();  // Starta nedräkningen om den inte är igång
 }
+
 
 
 
