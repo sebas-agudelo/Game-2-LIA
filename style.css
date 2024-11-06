@@ -90,10 +90,10 @@ body {
 
 .circle {
   position: absolute;
-  width: 65px; /* Diameter */
-  height: 65px; /* Diameter */
+  width: 100px; /* Diameter */
+  height: 100px; /* Diameter */
   /* background-color: rgba(255, 255, 255, 0.5); */
-  background-image: url("tractor-cartoon-style-stiker-white-background-isolated-transparent-png-logo-generative-ai-277311887.png");
+  background-image: url("istockphoto-1255905615-612x612.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
