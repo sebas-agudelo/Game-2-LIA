@@ -2,7 +2,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
   margin: 0;
   background-color: #f0f0f0;
   overscroll-behavior: none;
@@ -26,7 +26,7 @@ body {
 
 .game-setup-wrapper {
   width: 100%;
-  height: auto;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -38,10 +38,10 @@ body {
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
 
-  width: 100vw;
+  width: 95vw;
   max-width: 450px;
 
-  height: 100vw;
+  height: 95vw;
   max-height: 450px;
 
   border: 1px solid #000;
