@@ -163,7 +163,7 @@ document.addEventListener('touchmove', (e) => {
         const touch = e.touches[0];
         handleJoystickMovement(touch.clientX, touch.clientY);
     }
-});
+}, { passive: false });
 
 function handleJoystickMovement(clientX, clientY) {
     const joystickRect = joystick.getBoundingClientRect();
@@ -193,3 +193,5 @@ function handleJoystickMovement(clientX, clientY) {
     clearColorAtPosition(circleX + circle.offsetWidth / 2, circleY + circle.offsetHeight / 2);
     startCountdown();  // Kommentera bort om du bara vill ha countdown en gång
 }
+
+
