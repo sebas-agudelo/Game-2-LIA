@@ -171,16 +171,16 @@ function handleJoystickMovement(clientX, clientY) {
     let y = clientY - joystickRect.top - joystickRect.height / 2;
 
     const distance = Math.sqrt(x * x + y * y);
-    if (distance > 20) {
-        x = (x / distance) * 20;
-        y = (y / distance) * 20;
+    if (distance > 30) {
+        x = (x / distance) * 30;
+        y = (y / distance) * 30;
     }
 
     joystick.style.transform = `translate(${x}px, ${y}px)`;
 
     // Uppdatera cirkelns position baserat på joystick-rörelsen
-    circleX += x / 20;
-    circleY += y / 20;
+    circleX += x / 10;
+    circleY += y / 10;
 
     // Håll cirkeln inom gridens gränser
     circleX = Math.max(gridRect.left, Math.min(circleX, gridRect.right - circle.offsetWidth));

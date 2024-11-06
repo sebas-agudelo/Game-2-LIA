@@ -48,6 +48,7 @@ body {
 
   border: 1px solid #000;
   position: relative;
+  
 }
 
 .cell {
@@ -90,15 +91,15 @@ body {
 
 .circle {
   position: absolute;
-  width: 100px; /* Diameter */
-  height: 100px; /* Diameter */
-  /* background-color: rgba(255, 255, 255, 0.5); */
-  background-image: url("istockphoto-1255905615-612x612.png");
+  width: 65px;
+  height: 65px; 
+
+  background-image: url("tractor.png");  
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
-  pointer-events: none; /* Cirkeln ska inte påverka muspekaren */
-  transition: transform 0.1s; /* Gör rotationen smidig */
+  background-size: contain;
+  pointer-events: none; 
+
 }
 
 .game-mode-container {
