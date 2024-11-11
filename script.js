@@ -11,6 +11,7 @@ let score = 0;
 let goals = 25;
 let limitedTime = 39;
 const gameOver = 0;
+
 let clearedCells = [];
 for (let i = 0; i < gridSize; i++) {
     clearedCells[i] = []; // Skapa en ny array för varje rad
@@ -52,56 +53,70 @@ function collectPoints() {
 const cornImages = [
     'Namnlös design (2).png',
     'Namnlös design (3).png',
-    'Namnlös design (6).png'
+    'Namnlös design (6).png',
+    'explosive.png'
 ];
+
+function handleGameOver (imgSrc) {
+    cornImages.forEach((element, index) => {
+        if(imgSrc.includes(element) && index === 3){
+            alert('Game Over');
+            window.location.reload();
+        }
+    });
+}
 
 for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
-
+    
         cell.style.backgroundImage = "url('gräns.jpg')";
         cell.style.backgroundSize = 'cover';
         cell.style.backgroundColor = '#dbcf89'
 
-        // Lägg till cellen i grid-elementet
         gridElement.appendChild(cell);
     }
 }
 
-// Funktion för att generera en slumpmässig majsbild i en tom cell
 function generateRandomCornImage() {
-    let randomX, randomY;
-    do {
-        randomX = Math.floor(Math.random() * gridSize);
-        randomY = Math.floor(Math.random() * gridSize);
-    } while (clearedCells[randomY][randomX]); 
 
-    const cellIndex = randomY * gridSize + randomX;
-    const cell = gridElement.children[cellIndex];
+        let randomX, randomY;
+        do {
+            randomX = Math.floor(Math.random() * gridSize);
+            randomY = Math.floor(Math.random() * gridSize);
+        } while (clearedCells[randomY][randomX]); 
+    
+        const cellIndex = randomY * gridSize + randomX;
+        const cell = gridElement.children[cellIndex];
 
-    // Välj en slumpmässig bild från cornImages
-    const randomImageIndex = Math.floor(Math.random() * cornImages.length);
-    const imgSrc = cornImages[randomImageIndex];
+        const randomImageIndex = Math.floor(Math.random() * cornImages.length);
+        const imgSrc = cornImages[randomImageIndex];
 
-    // Skapa en img-tag för majsbilden
-    const img = document.createElement('img');
-    img.src = imgSrc;
-    img.className = 'img';
-
-    cell.appendChild(img); // Lägg till majsbilden
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.className = 'img';
+    
+        cell.appendChild(img); 
 }
 
-generateRandomCornImage();
+function genereteMultipleImages () {
+    const currentImages = gridElement.querySelectorAll('img').length;
+    const imagesToGenerate = 3 - currentImages; 
+
+    for (let i = 0; i < imagesToGenerate; i++) {
+        generateRandomCornImage(i);
+    }
+}
+
+genereteMultipleImages();
 
 const cellSize = gridElement.offsetWidth / gridSize;
 
-// Define `circleX` and `circleY` based on the centered position of the grid
 const gridRect = gridElement.getBoundingClientRect();
 let circleX = gridRect.left + (gridSize / 2) * cellSize - (circle.offsetWidth / 2);
 let circleY = gridRect.top + (gridSize / 2) * cellSize - (circle.offsetHeight / 2);
 
-// Set initial position of the circle
 circle.style.left = `${circleX}px`;
 circle.style.top = `${circleY}px`;
 
@@ -118,44 +133,50 @@ function clearColorAtPosition(x, y) {
         const cell = gridElement.children[cellIndex];
 
         if (!clearedCells[gridY][gridX]) {
-            // Ta bort majsbilden om den finns
+
             const img = cell.querySelector('img');
+            if(img){
+                handleGameOver(img.src);
+
+            }
             if (img) {
                 cell.removeChild(img);
-                generateRandomCornImage(); // Skapa en ny majsbild när den föregående tas bort
-                collectPoints(); // Öka poängen
+                generateRandomCornImage(); 
+                collectPoints();
             }
-
-            clearedCells[gridY][gridX] = true; // Markera cellen som rensad
+            
+            clearedCells[gridY][gridX] = true;
         }
+        
+        
     }
 }
 
 let isDragging = false;
-let movementInterval; // Intervall för att uppdatera rörelsen kontinuerligt
-let joystickSpeed = 0.1; // Hastigheten på rörelsen, kan justeras för att göra det snabbare
+let movementInterval; 
+let joystickSpeed = 0.1; 
 
 joystick.addEventListener('mousedown', (e) => {
     isDragging = true;
-    startMovement();  // Starta kontinuerlig rörelse
+    startMovement(); 
 });
 
 joystick.addEventListener('touchstart', (e) => {
     isDragging = true;
-    e.preventDefault(); // Förhindra scrollning
-    startMovement();  // Starta kontinuerlig rörelse
+    e.preventDefault(); 
+    startMovement();
 });
 
 document.addEventListener('mouseup', () => {
     isDragging = false;
     joystick.style.transform = 'translate(0, 0)';
-    stopMovement();  // Stoppa kontinuerlig rörelse
+    stopMovement();
 });
 
 document.addEventListener('touchend', () => {
     isDragging = false;
     joystick.style.transform = 'translate(0, 0)';
-    stopMovement();  // Stoppa kontinuerlig rörelse
+    stopMovement();
 });
 
 document.addEventListener('mousemove', (e) => {
@@ -164,7 +185,7 @@ document.addEventListener('mousemove', (e) => {
 
 document.addEventListener('touchmove', (e) => {
     if (isDragging) {
-        e.preventDefault(); // Förhindra scrollning
+        e.preventDefault();
         const touch = e.touches[0];
         handleJoystickMovement(touch.clientX, touch.clientY);
     }
@@ -178,7 +199,6 @@ function handleJoystickMovement(clientX, clientY) {
     let x = clientX - joystickRect.left - joystickRect.width / 2;
     let y = clientY - joystickRect.top - joystickRect.height / 2;
 
-    // Beräkna rörelsens avstånd
     const distance = Math.sqrt(x * x + y * y);
     if (distance > 30) {
         x = (x / distance) * 30;
@@ -187,23 +207,24 @@ function handleJoystickMovement(clientX, clientY) {
 
     joystick.style.transform = `translate(${x}px, ${y}px)`;
 
-    // Uppdatera joystickens koordinater med en högre hastighet
+    // joystick.style.left = `${x}px`;
+    // joystick.style.top = `${y}px`;
+
+  
     joystickX = x * joystickSpeed;  
     joystickY = y * joystickSpeed;
 }
 
-// Starta kontinuerlig rörelse
 function startMovement() {
-    if (movementInterval) return; // Förhindra flera intervall
+    if (movementInterval) return; 
 
     movementInterval = setInterval(() => {
         if (isDragging) {
-            moveCircle();  // Uppdatera traktorns position
+            moveCircle(); 
         }
-    }, 20);  // Uppdatera rörelsen mycket snabbare (var 20 millisekund)
+    }, 20);  
 }
 
-// Stoppa kontinuerlig rörelse
 function stopMovement() {
     clearInterval(movementInterval);
     movementInterval = null;
@@ -212,21 +233,17 @@ function stopMovement() {
 function moveCircle() {
     const gridRect = gridElement.getBoundingClientRect();
 
-    // Uppdatera cirkelns position
     circleX += joystickX;
     circleY += joystickY;
 
-    // Begränsa rörelsen inom gränserna
     circleX = Math.max(gridRect.left, Math.min(circleX, gridRect.right - circle.offsetWidth));
     circleY = Math.max(gridRect.top, Math.min(circleY, gridRect.bottom - circle.offsetHeight));
 
-    // Uppdatera cirkelns position
     circle.style.left = `${circleX}px`;
     circle.style.top = `${circleY}px`;
 
-    // Kontrollera om cirkeln är inom cellen
     clearColorAtPosition(circleX + circle.offsetWidth / 2, circleY + circle.offsetHeight / 2);
-    startCountdown();  // Starta nedräkningen om den inte är igång
+    startCountdown(); 
 }
 
 
