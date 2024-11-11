@@ -8,9 +8,12 @@ const timeSpan = document.getElementById('timeSpan');
 const scoreSpan = document.getElementById('scoreSpan');
 
 let score = 0;
-let goals = 25;
-let limitedTime = 39;
+let goals = 100;
+let limitedTime = 300;
 const gameOver = 0;
+let redursPoints = 1;
+let carrot = 5;
+let plusPoints = 2;
 
 let clearedCells = [];
 for (let i = 0; i < gridSize; i++) {
@@ -40,30 +43,47 @@ function startCountdown() {
     }, 1000);
 }
 
-function collectPoints() {
-    score += 1;
-    scoreSpan.innerHTML = `${score}P`;
-    if (score >= goals) {
-        alert('GRATTIS!!!');
-        location.reload();
-    }
-}
-
 // Skapa en array med bildens källor
 const cornImages = [
     'Namnlös design (2).png',
     'Namnlös design (3).png',
-    'Namnlös design (6).png',
-    'explosive.png'
+    'Namnlös design (6).png'
 ];
 
-function handleGameOver (imgSrc) {
-    cornImages.forEach((element, index) => {
-        if(imgSrc.includes(element) && index === 3){
-            alert('Game Over');
-            window.location.reload();
+const explosiveImages = [
+       'explosive.png',
+       'https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png'
+]
+
+function collectPoints(imgSrc) {
+
+    if (!imgSrc.includes('explosive.png')) {
+        score += plusPoints;
+        scoreSpan.innerHTML = `${score}P`;
+    }
+    
+    if (score >= goals) {
+        alert('GRATTIS!!!');
+        location.reload(); 
+    }
+}
+
+function handleGameOver(imgSrc) {
+    console.log("Current image source:", imgSrc); // Kontrollera bildens URL
+
+    explosiveImages.forEach((element, index) => {
+        if (imgSrc === element) {
+            if (index === 0) {
+                score -= redursPoints;
+                console.log("Minus", redursPoints, "from score. New score:", score);
+            }
+            else if (index === 0) {
+                score -= carrot;
+                console.log("Minus", carrot, "from score. New score:", score);
+            }
         }
     });
+    scoreSpan.innerHTML = `${score}P`;
 }
 
 for (let i = 0; i < gridSize; i++) {
@@ -91,12 +111,23 @@ function generateRandomCornImage() {
         const cell = gridElement.children[cellIndex];
 
         const randomImageIndex = Math.floor(Math.random() * cornImages.length);
-        const imgSrc = cornImages[randomImageIndex];
-
+        const randomExplosiveIndex = Math.floor(Math.random() * explosiveImages.length);
+        
+        const imgSrc = cornImages[randomImageIndex] 
+        const imgSrc2 = explosiveImages[randomExplosiveIndex];
+          
         const img = document.createElement('img');
-        img.src = imgSrc;
+
+        const chooseExplosive = Math.random() > 0.8; // 50% chans att välja explosive
+
+        if(chooseExplosive){
+            img.src = imgSrc2
+            
+        } else{
+            img.src = imgSrc
+        }
+        
         img.className = 'img';
-    
         cell.appendChild(img); 
 }
 
@@ -135,20 +166,19 @@ function clearColorAtPosition(x, y) {
         if (!clearedCells[gridY][gridX]) {
 
             const img = cell.querySelector('img');
-            if(img){
-                handleGameOver(img.src);
-
+            if (img) {
+                handleGameOver(img.src);  // Skickar den aktuella bildkällan till handleGameOver
             }
+
+            // Om vi träffade en bild, ta bort den och generera en ny
             if (img) {
                 cell.removeChild(img);
                 generateRandomCornImage(); 
-                collectPoints();
+                collectPoints(img.src);
             }
             
             clearedCells[gridY][gridX] = true;
         }
-        
-        
     }
 }
 
