@@ -71,18 +71,18 @@ function collectPoints(imgSrc) {
 function handleGameOver(imgSrc) {
     console.log("Current image source:", imgSrc); // Kontrollera bildens URL
 
-    explosiveImages.forEach((element, index) => {
-        if (imgSrc === element) {
-            if (index === 0) {
+ 
+        if (imgSrc === explosiveImages[0]) {
+            
                 score -= redursPoints;
                 console.log("Minus", redursPoints, "from score. New score:", score);
             }
-            else if (index === 0) {
+            else if (imgSrc === explosiveImages[1]) {
                 score -= carrot;
                 console.log("Minus", carrot, "from score. New score:", score);
             }
-        }
-    });
+        
+
     scoreSpan.innerHTML = `${score}P`;
 }
 
