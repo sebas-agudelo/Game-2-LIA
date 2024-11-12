@@ -18,24 +18,28 @@ theCircle.style.backgroundPosition = 'center';
 theCircle.style.backgroundRepeat = 'no-repeat';
 theCircle.style.backgroundSize = 'contain';
 
-
-
 const gridSize = 10;
 const colors = [];
 
 const gameOver = 0;
-let gameMode = 'gameOver';
+let gameMode = 'reducePoints';
 
 let limitedTime = 39;
 let score = 0;
 let goals = 16;
 
-let redursPoints = 1;
-let carrot = 5;
+let reducePonits1= 1;
+let reducePoints2 = 5;
 let plusPoints = 1;
 
 let modalHeaderText = ""; 
 let modalMessageText = ""; 
+
+/*
+Den här variabeln används för att kunna låta spelaren komma upp till ett viss poäng 
+innan hinderna dyker upp. 
+*/
+let hasGameReachedTarget = 5;
 
 let clearedCells = [];
 
@@ -50,14 +54,16 @@ timeSpan.innerHTML = `${limitedTime}S`;
 scoreSpan.innerHTML = `${score}P`;
 
 const cornImages = [
-    'Namnlös design (2).png',
-    'Namnlös design (3).png',
-    'Namnlös design (6).png'
+    'https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png',
+    'https://pngimg.com/uploads/corn/corn_PNG5273.png',
+    'https://pngimg.com/uploads/potato/potato_PNG7081.png',
+    'https://pngimg.com/uploads/onion/onion_PNG99201.png',
+
 ];
 
 const explosiveImages = [
-    'explosive.png',
-    'https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png'
+    'https://pngimg.com/uploads/tractor/tractor_PNG101303.png',
+    'https://pngimg.com/uploads/stone/stone_PNG13588.png' 
 ];
 
 let countdownInterval;
@@ -91,7 +97,7 @@ function collectPoints() {
 
     } else if(score <= gameOver){
         modalHeaderText = 'DU HAR FÖRLORAT';
-        modalMessageText = 'HOPPAS DU HAR INTE LYCKATS SAMLA TILLRÄCKLIGT MED VINSTPOÄNG';
+        modalMessageText = 'DU HAR INTE LYCKATS SAMLA TILLRÄCKLIGT MED VINSTPOÄNG';
         showModal();
         clearInterval(countdownInterval);
     }
@@ -107,28 +113,27 @@ function handleGameOver(imgSrc) {
 
         if(imgSrc.includes(explosiveImages[0])){
             modalHeaderText = 'DU HAR FÖRLORAT'
-            modalMessageText = 'HOPPAS ATT DU HAR BÄTTRE LYCKA NÄSTA GÅNG'
+            modalMessageText = 'DU KÖRDE PÅ HINDRET'
             showModal();
             clearInterval(countdownInterval);
-
-        } else if(imgSrc.includes(explosiveImages[1])){
-            score -= redursPoints;
+        }
+        
+        if(imgSrc.includes(explosiveImages[1])){
+            score -= reducePonits1;
         };
 
-
-        collectPoints()
         scoreSpan.innerHTML = `${score}P`;
 
     } else if(gameMode === 'reducePoints'){
         
             if (imgSrc.includes(explosiveImages[0])) {
-              score -= redursPoints;
+              score -= reducePoints2;
         
-            } else if (imgSrc.includes(explosiveImages[1])) {
-              score -= carrot;
+            }
+            if (imgSrc.includes(explosiveImages[1])) {
+              score -= reducePonits1;
             };
 
-            collectPoints()
             scoreSpan.innerHTML = `${score}P`;
     }
   }
@@ -169,9 +174,9 @@ function generateRandomCornImage() {
         img.src = imgSrc;
 
     } else {
-        const chooseExplosive = Math.random() > 0.5; 
+        const chooseExplosive = Math.random() > 0.8; 
 
-        if(score < 5){
+        if(score < hasGameReachedTarget){
             img.src = imgSrc;
 
         } else {
@@ -192,7 +197,7 @@ function generateRandomCornImage() {
 
 function genereteMultipleImages () {
     const currentImages = gridElement.querySelectorAll('img').length;
-    const imagesToGenerate = 3 - currentImages; 
+    const imagesToGenerate = 4 - currentImages; 
 
     for (let i = 0; i < imagesToGenerate; i++) {
         generateRandomCornImage(i);
@@ -288,6 +293,7 @@ let joystickY = 0;
 const maxJoystickDistance = 30;
 
 function handleJoystickMovement(clientX, clientY) {
+
     const joystickRect = joystick.getBoundingClientRect();
     let x = clientX - joystickRect.left - joystickRect.width / 2;
     let y = clientY - joystickRect.top - joystickRect.height / 2;
