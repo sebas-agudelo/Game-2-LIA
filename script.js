@@ -1,22 +1,31 @@
 const gridElement = document.getElementById('grid');
 const joystick = document.getElementById('joystick');
 const circle = document.getElementById('circle');
-const gridSize = 10;
-const colors = [];
 
 const timeSpan = document.getElementById('timeSpan');
 const scoreSpan = document.getElementById('scoreSpan');
 
+const modal = document.getElementById("modal");
+const modalHeader = document.querySelector('.modal-header');
+const modalText = document.querySelector('.modal-text');
+const modalCloseButton = document.querySelector('.close-button');
+
+const gridSize = 10;
+const colors = [];
+
 const gameOver = 0;
 let gameMode = 'gameOver';
 
-let limitedTime = 39;
+let limitedTime = 59;
 let score = 0;
 let goals = 16;
 
 let redursPoints = 1;
 let carrot = 5;
 let plusPoints = 1;
+
+let modalHeaderText = ""; 
+let modalMessageText = ""; 
 
 let clearedCells = [];
 
@@ -52,8 +61,10 @@ function startCountdown() {
         
         if (limitedTime <= gameOver) {
             clearInterval(countdownInterval);
-            alert('Game over');
-            window.location.reload();
+            modalHeaderText = 'TIDEN HAR LÖPT UT'
+            modalMessageText = 'FÖRSÖK IGEN'
+            showModal();
+            
         }
     }, 1000);
 }
@@ -61,13 +72,21 @@ function startCountdown() {
 function collectPoints() {
     score += plusPoints;
     scoreSpan.innerHTML = `${score}P`;
+
     if (score >= goals) {
-        alert('GRATTIS!!!');
-        location.reload();
+        modalHeaderText = 'GRATTIS';
+        modalMessageText = 'DU LYCKADES SAMLA TILLRÄCKLIGT MED VINSTPOÄNG INOM TIDSGRÄNDEN';
+        showModal();
+        clearInterval(countdownInterval);
+
+    } else if(score <= gameOver){
+        modalHeaderText = 'DU HAR FÖRLORAT';
+        modalMessageText = 'HOPPAS DU HAR INTE LYCKATS SAMLA TILLRÄCKLIGT MED VINSTPOÄNG';
+        showModal();
+        clearInterval(countdownInterval);
     }
+
 };
-
-
 
 function handleGameOver(imgSrc) {
 
@@ -75,14 +94,19 @@ function handleGameOver(imgSrc) {
         collectPoints()
 
     } else if(gameMode === 'gameOver'){
+
         if(imgSrc.includes(explosiveImages[0])){
-            alert('Game Over');
-            window.location.reload();
-        } 
-        if(imgSrc.includes(explosiveImages[1])){
+            modalHeaderText = 'DU HAR FÖRLORAT'
+            modalMessageText = 'HOPPAS ATT DU HAR BÄTTRE LYCKA NÄSTA GÅNG'
+            showModal();
+            clearInterval(countdownInterval);
+
+        } else if(imgSrc.includes(explosiveImages[1])){
             score -= redursPoints;
-        } 
-        
+        };
+
+
+        collectPoints()
         scoreSpan.innerHTML = `${score}P`;
 
     } else if(gameMode === 'reducePoints'){
@@ -92,9 +116,9 @@ function handleGameOver(imgSrc) {
         
             } else if (imgSrc.includes(explosiveImages[1])) {
               score -= carrot;
-            
-            }
+            };
 
+            collectPoints()
             scoreSpan.innerHTML = `${score}P`;
     }
   }
@@ -304,6 +328,12 @@ function moveCircle() {
     startCountdown(); 
 }
 
+const showModal = () => {
+    modalHeader.innerHTML = modalHeaderText;
+    modalText.innerHTML = modalMessageText;
+    modal.classList.remove("hidden");
+};
 
-
-
+modalCloseButton.addEventListener('click', () => {
+    window.location.reload();
+})
