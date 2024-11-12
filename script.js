@@ -16,7 +16,7 @@ const colors = [];
 const gameOver = 0;
 let gameMode = 'gameOver';
 
-let limitedTime = 59;
+let limitedTime = 10;
 let score = 0;
 let goals = 16;
 
