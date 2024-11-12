@@ -36,7 +36,6 @@ body {
 
 .grid-modal-container{
   position: relative;
-
 }
 
 .grid {
@@ -106,11 +105,6 @@ body {
   position: absolute;
   width: 65px;
   height: 65px; 
-
-  background-image: url("tractor.png");  
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   pointer-events: none; 
 
 }

@@ -1,6 +1,5 @@
 const gridElement = document.getElementById('grid');
 const joystick = document.getElementById('joystick');
-const circle = document.getElementById('circle');
 
 const timeSpan = document.getElementById('timeSpan');
 const scoreSpan = document.getElementById('scoreSpan');
@@ -10,13 +9,24 @@ const modalHeader = document.querySelector('.modal-header');
 const modalText = document.querySelector('.modal-text');
 const modalCloseButton = document.querySelector('.close-button');
 
+const circle = document.getElementById('circle');
+circle.classList.add('circle')
+const theCircle = document.querySelector('.circle');
+
+theCircle.style.backgroundImage = 'url("./tractor.png")';
+theCircle.style.backgroundPosition = 'center';
+theCircle.style.backgroundRepeat = 'no-repeat';
+theCircle.style.backgroundSize = 'contain';
+
+
+
 const gridSize = 10;
 const colors = [];
 
 const gameOver = 0;
 let gameMode = 'gameOver';
 
-let limitedTime = 10;
+let limitedTime = 39;
 let score = 0;
 let goals = 16;
 
@@ -34,7 +44,7 @@ for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
         clearedCells[i][j] = false;
     }
-}
+};
 
 timeSpan.innerHTML = `${limitedTime}S`;
 scoreSpan.innerHTML = `${score}P`;
@@ -48,7 +58,7 @@ const cornImages = [
 const explosiveImages = [
     'explosive.png',
     'https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png'
-]
+];
 
 let countdownInterval;
 
@@ -337,3 +347,4 @@ const showModal = () => {
 modalCloseButton.addEventListener('click', () => {
     window.location.reload();
 })
+
