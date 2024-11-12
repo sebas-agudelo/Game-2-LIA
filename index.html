@@ -7,8 +7,8 @@
     <title>Färgsuddspelet</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spicy+Rice&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spicy+Rice&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -24,15 +24,28 @@
                 </span><span id="scoreSpan"></span>
             </div>
         </div>
-        
+
         <div class="game-setup-wrapper">
             <div class="grid" id="grid"></div>
+
+
+            <div id="modal" class="modal hidden">
+                <div class="modal-content">
+                    <h1 class="modal-header">GRATTIS</h1>
+                    <p class="modal-text">DU KLARADE DIG</p>
+                    <button class="close-button">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="joystick-wrapper">
             <div class="joystick">
                 <div class="stick" id="joystick"></div>
             </div>
             <div class="circle" id="circle"></div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 

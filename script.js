@@ -7,34 +7,49 @@ const colors = [];
 const timeSpan = document.getElementById('timeSpan');
 const scoreSpan = document.getElementById('scoreSpan');
 
-let score = 0;
-let goals = 100;
-let limitedTime = 300;
 const gameOver = 0;
+let gameMode = 'gameOver';
+
+let limitedTime = 39;
+let score = 0;
+let goals = 16;
+
 let redursPoints = 1;
 let carrot = 5;
-let plusPoints = 2;
+let plusPoints = 1;
 
 let clearedCells = [];
+
 for (let i = 0; i < gridSize; i++) {
-    clearedCells[i] = []; // Skapa en ny array för varje rad
+    clearedCells[i] = []; 
     for (let j = 0; j < gridSize; j++) {
-        clearedCells[i][j] = false; // Fyll cellerna med falskt
+        clearedCells[i][j] = false;
     }
 }
 
 timeSpan.innerHTML = `${limitedTime}S`;
 scoreSpan.innerHTML = `${score}P`;
 
+const cornImages = [
+    'Namnlös design (2).png',
+    'Namnlös design (3).png',
+    'Namnlös design (6).png'
+];
+
+const explosiveImages = [
+    'explosive.png',
+    'https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png'
+]
+
 let countdownInterval;
 
 function startCountdown() {
     if (countdownInterval) return;
-
+    
     countdownInterval = setInterval(() => {
         limitedTime--;
         timeSpan.innerHTML = `${limitedTime}S`;
-
+        
         if (limitedTime <= gameOver) {
             clearInterval(countdownInterval);
             alert('Game over');
@@ -43,48 +58,46 @@ function startCountdown() {
     }, 1000);
 }
 
-// Skapa en array med bildens källor
-const cornImages = [
-    'Namnlös design (2).png',
-    'Namnlös design (3).png',
-    'Namnlös design (6).png'
-];
-
-const explosiveImages = [
-       'explosive.png',
-       'https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png'
-]
-
-function collectPoints(imgSrc) {
-
-    if (!imgSrc.includes('explosive.png')) {
-        score += plusPoints;
-        scoreSpan.innerHTML = `${score}P`;
-    }
-    
+function collectPoints() {
+    score += plusPoints;
+    scoreSpan.innerHTML = `${score}P`;
     if (score >= goals) {
         alert('GRATTIS!!!');
-        location.reload(); 
+        location.reload();
     }
-}
+};
+
+
 
 function handleGameOver(imgSrc) {
-    console.log("Current image source:", imgSrc); // Kontrollera bildens URL
 
- 
-        if (imgSrc === explosiveImages[0]) {
-            
-                score -= redursPoints;
-                console.log("Minus", redursPoints, "from score. New score:", score);
-            }
-            else if (imgSrc === explosiveImages[1]) {
-                score -= carrot;
-                console.log("Minus", carrot, "from score. New score:", score);
-            }
+    if(gameMode === 'colectPoints'){
+        collectPoints()
+
+    } else if(gameMode === 'gameOver'){
+        if(imgSrc.includes(explosiveImages[0])){
+            alert('Game Over');
+            window.location.reload();
+        } 
+        if(imgSrc.includes(explosiveImages[1])){
+            score -= redursPoints;
+        } 
         
+        scoreSpan.innerHTML = `${score}P`;
 
-    scoreSpan.innerHTML = `${score}P`;
-}
+    } else if(gameMode === 'reducePoints'){
+        
+            if (imgSrc.includes(explosiveImages[0])) {
+              score -= redursPoints;
+        
+            } else if (imgSrc.includes(explosiveImages[1])) {
+              score -= carrot;
+            
+            }
+
+            scoreSpan.innerHTML = `${score}P`;
+    }
+  }
 
 for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
@@ -100,36 +113,48 @@ for (let i = 0; i < gridSize; i++) {
 }
 
 function generateRandomCornImage() {
+    let randomX, randomY;
+    let cell, cellIndex;
 
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * gridSize);
-            randomY = Math.floor(Math.random() * gridSize);
-        } while (clearedCells[randomY][randomX]); 
+    do {
+        randomX = Math.floor(Math.random() * gridSize);
+        randomY = Math.floor(Math.random() * gridSize);
+        cellIndex = randomY * gridSize + randomX;
+        cell = gridElement.children[cellIndex];
+    } while (clearedCells[randomY][randomX] || cell.querySelector('img')); 
+
+    const randomImageIndex = Math.floor(Math.random() * cornImages.length);
+    const randomExplosiveIndex = Math.floor(Math.random() * explosiveImages.length);
     
-        const cellIndex = randomY * gridSize + randomX;
-        const cell = gridElement.children[cellIndex];
+    const imgSrc = cornImages[randomImageIndex]; 
+    const imgSrc2 = explosiveImages[randomExplosiveIndex];
+    
+    const img = document.createElement('img');
 
-        const randomImageIndex = Math.floor(Math.random() * cornImages.length);
-        const randomExplosiveIndex = Math.floor(Math.random() * explosiveImages.length);
-        
-        const imgSrc = cornImages[randomImageIndex] 
-        const imgSrc2 = explosiveImages[randomExplosiveIndex];
-          
-        const img = document.createElement('img');
+    if(gameMode === 'colectPoints'){
+        img.src = imgSrc;
 
-        const chooseExplosive = Math.random() > 0.8; // 50% chans att välja explosive
+    } else {
+        const chooseExplosive = Math.random() > 0.5; 
 
-        if(chooseExplosive){
-            img.src = imgSrc2
-            
-        } else{
-            img.src = imgSrc
+        if(score < 5){
+            img.src = imgSrc;
+
+        } else {
+
+            if (chooseExplosive) {
+                img.src = imgSrc2;
+            } else {
+                img.src = imgSrc;
+            }
         }
-        
-        img.className = 'img';
-        cell.appendChild(img); 
+    };
+
+    img.className = 'img';
+    clearedCells[randomY][randomX] = false; 
+    cell.appendChild(img); 
 }
+
 
 function genereteMultipleImages () {
     const currentImages = gridElement.querySelectorAll('img').length;
@@ -155,7 +180,7 @@ function clearColorAtPosition(x, y) {
     const gridRect = gridElement.getBoundingClientRect();
     const adjustedX = x - gridRect.left;
     const adjustedY = y - gridRect.top;
-
+   
     const gridX = Math.floor(adjustedX / cellSize);
     const gridY = Math.floor(adjustedY / cellSize);
 
@@ -163,24 +188,25 @@ function clearColorAtPosition(x, y) {
         const cellIndex = gridY * gridSize + gridX;
         const cell = gridElement.children[cellIndex];
 
-        if (!clearedCells[gridY][gridX]) {
+        const img = cell.querySelector("img");
 
-            const img = cell.querySelector('img');
-            if (img) {
-                handleGameOver(img.src);  // Skickar den aktuella bildkällan till handleGameOver
+      
+        if (img) {
+            if (img.src.includes(explosiveImages[0]) || img.src.includes(explosiveImages[1])) {
+                handleGameOver(img.src); 
+            } else {
+                collectPoints(); 
             }
 
-            // Om vi träffade en bild, ta bort den och generera en ny
-            if (img) {
-                cell.removeChild(img);
-                generateRandomCornImage(); 
-                collectPoints(img.src);
-            }
-            
-            clearedCells[gridY][gridX] = true;
+      
+            cell.removeChild(img);
+            clearedCells[gridY][gridX] = false; 
+            generateRandomCornImage();
         }
     }
 }
+
+
 
 let isDragging = false;
 let movementInterval; 
@@ -199,12 +225,14 @@ joystick.addEventListener('touchstart', (e) => {
 
 document.addEventListener('mouseup', () => {
     isDragging = false;
+    joystick.style.transition = 'transform 0.2s'; 
     joystick.style.transform = 'translate(0, 0)';
     stopMovement();
 });
 
 document.addEventListener('touchend', () => {
     isDragging = false;
+    joystick.style.transition = 'transform 0.2s';
     joystick.style.transform = 'translate(0, 0)';
     stopMovement();
 });
@@ -223,25 +251,25 @@ document.addEventListener('touchmove', (e) => {
 
 let joystickX = 0;
 let joystickY = 0;
+const maxJoystickDistance = 30;
 
 function handleJoystickMovement(clientX, clientY) {
     const joystickRect = joystick.getBoundingClientRect();
     let x = clientX - joystickRect.left - joystickRect.width / 2;
     let y = clientY - joystickRect.top - joystickRect.height / 2;
 
+    // Constrain joystick movement to a circular area
     const distance = Math.sqrt(x * x + y * y);
-    if (distance > 30) {
-        x = (x / distance) * 30;
-        y = (y / distance) * 30;
+    if (distance > maxJoystickDistance) {
+        x = (x / distance) * maxJoystickDistance;
+        y = (y / distance) * maxJoystickDistance;
     }
 
+    // Apply smooth transform
+    joystick.style.transition = 'transform 0.05s'; 
     joystick.style.transform = `translate(${x}px, ${y}px)`;
 
-    // joystick.style.left = `${x}px`;
-    // joystick.style.top = `${y}px`;
-
-  
-    joystickX = x * joystickSpeed;  
+    joystickX = x * joystickSpeed;
     joystickY = y * joystickSpeed;
 }
 

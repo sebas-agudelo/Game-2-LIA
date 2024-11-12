@@ -27,6 +27,7 @@ body {
 }
 
 .game-setup-wrapper {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -70,6 +71,12 @@ body {
   pointer-events: none; /* Gör att majsbilden inte påverkar interaktionen */
 }
 
+.joystick-wrapper{
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
 
 .joystick {
   width: 100px;
@@ -134,5 +141,19 @@ body {
   font-style: normal;
 }
 
+#modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 95vw;
+  max-width: 425px;
+  height: 95vw;
+  max-height: 425px;
+display: none;
+
+
+}
 
 
