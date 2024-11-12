@@ -37,7 +37,7 @@ let modalMessageText = "";
 
 /*
 Den här variabeln används för att kunna låta spelaren komma upp till ett viss poäng 
-innan hinderna dyker upp. 
+innan hinderna dyker upp.....  
 */
 let hasGameReachedTarget = 5;
 
