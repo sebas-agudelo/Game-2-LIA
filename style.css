@@ -162,6 +162,10 @@ body {
 
   z-index: 999;
 
+  user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+
 }
 
 .modal-content{

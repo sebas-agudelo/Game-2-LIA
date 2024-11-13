@@ -1,54 +1,41 @@
 const gridElement = document.getElementById("grid");
 const joystick = document.getElementById("joystick");
-
 const timeSpan = document.getElementById("timeSpan");
 const scoreSpan = document.getElementById("scoreSpan");
-
 const modal = document.getElementById("modal");
 const modalHeader = document.querySelector(".modal-header");
 const modalText = document.querySelector(".modal-text");
 const modalCloseButton = document.querySelector(".close-button");
-
 const circle = document.getElementById("circle");
+
 circle.classList.add("circle");
 const theCircle = document.querySelector(".circle");
-
 theCircle.style.backgroundImage = 'url("./tractor.png")';
 theCircle.style.backgroundPosition = "center";
 theCircle.style.backgroundRepeat = "no-repeat";
 theCircle.style.backgroundSize = "contain";
 
 const gridSize = 10;
-const colors = [];
-
-const gameOver = 0;
-let gameMode = "reducePoints";
+let gameMode = "colectPoints";
 
 let limitedTime = 39;
+const gameOver = 0;
 let score = 0;
 let goals = 16;
+let smallPenaltyPoints = 1;
+let largePenaltyPoints = 5;
+let rewardPoints = 1;
 
-let reducePonits1 = 1;
-let reducePoints2 = 5;
-let plusPoints = 1;
+let isDragging = false;
+let joystickSpeed = 0.1;
 
 let modalHeaderText = "";
 let modalMessageText = "";
-
 /*
 Den här variabeln används för att kunna låta spelaren komma upp till ett viss poäng 
 innan hinderna dyker upp.....  
 */
 let hasGameReachedTarget = 5;
-
-let clearedCells = [];
-
-for (let i = 0; i < gridSize; i++) {
-  clearedCells[i] = [];
-  for (let j = 0; j < gridSize; j++) {
-    clearedCells[i][j] = false;
-  }
-}
 
 timeSpan.innerHTML = `${limitedTime}S`;
 scoreSpan.innerHTML = `${score}P`;
@@ -64,6 +51,27 @@ const explosiveImages = [
   "https://pngimg.com/uploads/tractor/tractor_PNG101303.png",
   "https://pngimg.com/uploads/stone/stone_PNG13588.png",
 ];
+
+let clearedCells = [];
+for (let i = 0; i < gridSize; i++) {
+  clearedCells[i] = [];
+  for (let j = 0; j < gridSize; j++) {
+    clearedCells[i][j] = false;
+  }
+}
+
+  for (let i = 0; i < gridSize; i++) {
+    for (let j = 0; j < gridSize; j++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      
+      cell.style.backgroundImage = "url('gräns.jpg')";
+      cell.style.backgroundSize = "cover";
+      cell.style.backgroundColor = "#dbcf89";
+      
+      gridElement.appendChild(cell);
+    }
+  }
 
 let countdownInterval;
 
@@ -84,7 +92,7 @@ function startCountdown() {
 }
 
 function collectPoints() {
-  score += plusPoints;
+  score += rewardPoints;
   scoreSpan.innerHTML = `${score}P`;
 
   if (score >= goals) {
@@ -117,10 +125,10 @@ function handleGameOver(imgSrc) {
     }
   } else if (gameMode === "reducePoints") {
     if (imgSrc.includes(explosiveImages[0])) {
-      score -= reducePoints2;
+      score -= largePenaltyPoints;
     }
     if (imgSrc.includes(explosiveImages[1])) {
-      score -= reducePonits1;
+      score -= smallPenaltyPoints;
     }
 
     scoreSpan.innerHTML = `${score}P`;
@@ -131,18 +139,8 @@ function handleGameOver(imgSrc) {
   }
 }
 
-for (let i = 0; i < gridSize; i++) {
-  for (let j = 0; j < gridSize; j++) {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-
-    cell.style.backgroundImage = "url('gräns.jpg')";
-    cell.style.backgroundSize = "cover";
-    cell.style.backgroundColor = "#dbcf89";
-
-    gridElement.appendChild(cell);
-  }
-}
+// Variabel för att hålla reda på antalet explosiveImages[0]-bilder i gameOver-läget
+let explosiveImageCount = 0;
 
 function generateRandomCornImage() {
   let randomX, randomY;
@@ -156,27 +154,25 @@ function generateRandomCornImage() {
   } while (clearedCells[randomY][randomX] || cell.querySelector("img"));
 
   const randomImageIndex = Math.floor(Math.random() * cornImages.length);
-
   const imgSrc = cornImages[randomImageIndex];
-
   const img = document.createElement("img");
-  const chooseExplosive = Math.random() > 0.8;
+  const chooseExplosive = Math.random() > 0.75;
 
   if (gameMode === "colectPoints") {
     img.src = imgSrc;
   } else {
     if (chooseExplosive) {
-      if (gameMode === "gameOver") {
+      if (gameMode === "gameOver" && explosiveImageCount < 2) {
         img.src = explosiveImages[0];
+        explosiveImageCount++;
       } else if (gameMode === "reducePoints") {
-
-        if(score <= hasGameReachedTarget){
-            img.src = imgSrc;
-        } else{
-            const randomExplosiveIndex = Math.floor(
-              Math.random() * explosiveImages.length
-            );
-            img.src = explosiveImages[randomExplosiveIndex];
+        if (score <= hasGameReachedTarget) {
+          img.src = imgSrc;
+        } else {
+          const randomExplosiveIndex = Math.floor(
+            Math.random() * explosiveImages.length
+          );
+          img.src = explosiveImages[randomExplosiveIndex];
         }
       }
     } else {
@@ -188,6 +184,7 @@ function generateRandomCornImage() {
   clearedCells[randomY][randomX] = false;
   cell.appendChild(img);
 }
+
 
 function genereteMultipleImages() {
   const currentImages = gridElement.querySelectorAll("img").length;
@@ -242,9 +239,7 @@ function clearColorAtPosition(x, y) {
   }
 }
 
-let isDragging = false;
 let movementInterval;
-let joystickSpeed = 0.1;
 
 joystick.addEventListener("mousedown", (e) => {
   isDragging = true;
