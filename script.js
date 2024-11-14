@@ -16,7 +16,7 @@ theCircle.style.backgroundRepeat = "no-repeat";
 theCircle.style.backgroundSize = "contain";
 
 const gridSize = 10;
-let gameMode = "colectPoints";
+let gameMode = "reducePoints";
 
 let limitedTime = 39;
 const gameOver = 0;
@@ -29,8 +29,12 @@ let rewardPoints = 1;
 let isDragging = false;
 let joystickSpeed = 0.1;
 
+//Den häör variabeln används för att ändra rubriken i modalen.
 let modalHeaderText = "";
+
+//Den här variabeln används för att ändra texten i modalen
 let modalMessageText = "";
+
 /*
 Den här variabeln används för att kunna låta spelaren komma upp till ett viss poäng 
 innan hinderna dyker upp.....  
@@ -40,13 +44,15 @@ let hasGameReachedTarget = 5;
 timeSpan.innerHTML = `${limitedTime}S`;
 scoreSpan.innerHTML = `${score}P`;
 
+//Array för alla bilder som ger poäng
 const cornImages = [
-  "https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png",
-  "https://pngimg.com/uploads/corn/corn_PNG5273.png",
-  "https://pngimg.com/uploads/potato/potato_PNG7081.png",
+  // "https://purepng.com/public/uploads/large/purepng.com-carrotcarrotdomestic-carrotfast-growingcarrots-1701527243731np6ec.png",
+  // "https://pngimg.com/uploads/corn/corn_PNG5273.png",
+  // "https://pngimg.com/uploads/potato/potato_PNG7081.png",
   "https://pngimg.com/uploads/onion/onion_PNG99201.png",
 ];
 
+//Array för game over bilden och minus poäng bilder
 const explosiveImages = [
   "https://pngimg.com/uploads/tractor/tractor_PNG101303.png",
   "https://pngimg.com/uploads/stone/stone_PNG13588.png",
@@ -75,6 +81,7 @@ for (let i = 0; i < gridSize; i++) {
 
 let countdownInterval;
 
+//Funktionen som startar tiden så fort man rör joystick
 function startCountdown() {
   if (countdownInterval) return;
 
@@ -83,13 +90,13 @@ function startCountdown() {
     timeSpan.innerHTML = `${limitedTime}S`;
 
     if (limitedTime <= gameOver) {
-      clearInterval(countdownInterval);
       modalHeaderText = "TIDEN HAR LÖPT UT";
-      modalMessageText = "FÖRSÖK IGEN";
+      modalMessageText = "BRA ATT VETA TILL NÄSTA GRÅNG.... DU HAR 39S FÖR ATT KOMMA TILL MÅL";
       showModal();
     }
   }, 1000);
 }
+
 
 function collectPoints() {
   score += rewardPoints;
@@ -97,15 +104,15 @@ function collectPoints() {
 
   if (score >= goals) {
     modalHeaderText = "GRATTIS";
-    modalMessageText =
-      "DU LYCKADES SAMLA TILLRÄCKLIGT MED VINSTPOÄNG INOM TIDSGRÄNDEN";
+    modalMessageText = "DU LYCKADES NÅ MÅLET INNAN TIDEN LÖPT UT";
     showModal();
-    clearInterval(countdownInterval);
-  } else if (score <= gameOver) {
+  }
+
+  if (score <= gameOver) {
     modalHeaderText = "DU HAR FÖRLORAT";
-    modalMessageText = "DU HAR INTE LYCKATS SAMLA TILLRÄCKLIGT MED VINSTPOÄNG";
+    modalMessageText = "DU HAR INTE LYCKATS UNDVIKA HINDERNA";
     showModal();
-    clearInterval(countdownInterval);
+   
   }
 }
 
@@ -114,10 +121,10 @@ function handleGameOver(imgSrc) {
     collectPoints();
   } else if (gameMode === "gameOver") {
     if (imgSrc.includes(explosiveImages[0])) {
-      modalHeaderText = "DU HAR FÖRLORAT";
-      modalMessageText = "DU KÖRDE PÅ HINDRET";
+      modalHeaderText = "DU KÖRDE PÅ HINDRET";
+      modalMessageText = "FÖRSÖKT IGEN";
       showModal();
-      clearInterval(countdownInterval);
+
     }
 
     if (score <= gameOver) {
@@ -156,7 +163,7 @@ function generateRandomCornImage() {
   const randomImageIndex = Math.floor(Math.random() * cornImages.length);
   const imgSrc = cornImages[randomImageIndex];
   const img = document.createElement("img");
-  const chooseExplosive = Math.random() > 0.75;
+  const chooseExplosive = Math.random() > 0.1;
 
   if (gameMode === "colectPoints") {
     img.src = imgSrc;
@@ -350,6 +357,7 @@ const showModal = () => {
   modalHeader.innerHTML = modalHeaderText;
   modalText.innerHTML = modalMessageText;
   modal.classList.remove("hidden");
+  clearInterval(countdownInterval);
 };
 
 modalCloseButton.addEventListener("click", () => {
