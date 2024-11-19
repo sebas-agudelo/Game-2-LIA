@@ -62,6 +62,9 @@ body {
   overflow: hidden; 
   background-size: cover;
   border: 1px solid gray;
+  
+  background-image: url('gräns.jpg');
+  background-size: cover;
 }
 
 .cell .img {
@@ -135,7 +138,7 @@ body {
   margin: 0 15px 0 0;
 }
 
-.time-wrapper #timeSpan,
+.time-wrapper .timeSpan,
 .score-wrapper #scoreSpan {
   color: #ff0000;
   font-size: 1.5rem;

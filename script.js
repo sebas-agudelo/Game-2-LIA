@@ -1,6 +1,6 @@
 const gridElement = document.getElementById("grid");
 const joystick = document.getElementById("joystick");
-const timeSpan = document.getElementById("timeSpan");
+const timeSpan = document.querySelector(".timeSpan");
 const scoreSpan = document.getElementById("scoreSpan");
 const modal = document.getElementById("modal");
 const modalHeader = document.querySelector(".modal-header");
@@ -16,6 +16,8 @@ theCircle.style.backgroundRepeat = "no-repeat";
 theCircle.style.backgroundSize = "contain";
 
 const gridSize = 10;
+
+//Dem tre olika spellägen är: collectPoints, reducePoints, gameOver
 let gameMode = "reducePoints";
 
 let limitedTime = 39;
@@ -70,11 +72,7 @@ for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
       const cell = document.createElement("div");
       cell.className = "cell";
-      
-      cell.style.backgroundImage = "url('gräns.jpg')";
-      cell.style.backgroundSize = "cover";
-      cell.style.backgroundColor = "#dbcf89";
-      
+            
       gridElement.appendChild(cell);
     }
   }
@@ -117,7 +115,7 @@ function collectPoints() {
 }
 
 function handleGameOver(imgSrc) {
-  if (gameMode === "colectPoints") {
+  if (gameMode === "collectPoints") {
     collectPoints();
   } else if (gameMode === "gameOver") {
     if (imgSrc.includes(explosiveImages[0])) {
