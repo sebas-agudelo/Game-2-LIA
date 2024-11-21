@@ -7,6 +7,7 @@ body {
   background-color: #ffffff;
   overscroll-behavior: none;
   overflow: none;
+  /* position: relative; */
   
 }
 
@@ -39,7 +40,7 @@ body {
 }
 
 .grid {
-  position: relative;
+  /* position: relative; */
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
@@ -77,16 +78,6 @@ body {
   pointer-events: none; 
   user-select: none;
   -webkit-user-drag: none;
-}
-
-.joystick-wrapper{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 400px;
-
 }
 
 .joystick {

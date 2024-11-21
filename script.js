@@ -20,7 +20,7 @@ const gridSize = 10;
 //Dem tre olika spellägen är: collectPoints, reducePoints, gameOver
 let gameMode = "reducePoints";
 
-let limitedTime = 39;
+let limitedTime = 1000;
 const gameOver = 0;
 let score = 0;
 let goals = 16;
@@ -206,12 +206,13 @@ const cellSize = gridElement.offsetWidth / gridSize;
 
 const gridRect = gridElement.getBoundingClientRect();
 let circleX =
-  gridRect.left + (gridSize / 2) * cellSize - circle.offsetWidth / 2;
+  gridRect.left + gridElement.offsetWidth / 2 - circle.offsetWidth / 2;
 let circleY =
-  gridRect.top + (gridSize / 2) * cellSize - circle.offsetHeight / 2;
+  gridRect.top + gridElement.offsetHeight / 2 - circle.offsetHeight / 2;
 
 circle.style.left = `${circleX}px`;
 circle.style.top = `${circleY}px`;
+
 
 function clearColorAtPosition(x, y) {
   const gridRect = gridElement.getBoundingClientRect();
