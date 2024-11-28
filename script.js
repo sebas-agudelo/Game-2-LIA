@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function() {
+
 const gridElement = document.getElementById("grid");
 const joystick = document.getElementById("joystick");
 const timeSpan = document.querySelector(".timeSpan");
@@ -43,8 +45,17 @@ innan hinderna dyker upp.....
 */
 let hasGameReachedTarget = 5;
 
-timeSpan.innerHTML = `${limitedTime}S`;
-scoreSpan.innerHTML = `${score}P`;
+function updateUI() {
+  if (timeSpan) {
+    timeSpan.innerHTML = `${limitedTime}S`;
+  }
+  
+  if (scoreSpan) {
+    scoreSpan.innerHTML = `${score}P`;
+  }
+}
+
+updateUI()
 
 //Array för alla bilder som ger poäng
 const cornImages = [
@@ -85,7 +96,7 @@ function startCountdown() {
 
   countdownInterval = setInterval(() => {
     limitedTime--;
-    timeSpan.innerHTML = `${limitedTime}S`;
+    updateUI() 
 
     if (limitedTime <= gameOver) {
       modalHeaderText = "TIDEN HAR LÖPT UT";
@@ -98,7 +109,7 @@ function startCountdown() {
 
 function collectPoints() {
   score += rewardPoints;
-  scoreSpan.innerHTML = `${score}P`;
+  updateUI() 
 
   if (score >= goals) {
     modalHeaderText = "GRATTIS";
@@ -136,7 +147,7 @@ function handleGameOver(imgSrc) {
       score -= smallPenaltyPoints;
     }
 
-    scoreSpan.innerHTML = `${score}P`;
+    updateUI() 
 
     if (score <= gameOver) {
       collectPoints();
@@ -203,15 +214,24 @@ function genereteMultipleImages() {
 genereteMultipleImages();
 
 const cellSize = gridElement.offsetWidth / gridSize;
+let circleX;
+let circleY;
 
-const gridRect = gridElement.getBoundingClientRect();
-let circleX =
-  gridRect.left + gridElement.offsetWidth / 2 - circle.offsetWidth / 2;
-let circleY =
-  gridRect.top + gridElement.offsetHeight / 2 - circle.offsetHeight / 2;
+function resetCirclePosition() {
+  const gridRect = gridElement.getBoundingClientRect();
+  circleX =
+    gridRect.left + gridRect.width / 2 - circle.offsetWidth / 2;
+  circleY =
+    gridRect.top + gridRect.height / 2 - circle.offsetHeight / 2;
+  circle.style.left = `${circleX}px`;
+  circle.style.top = `${circleY}px`;
+}
 
-circle.style.left = `${circleX}px`;
-circle.style.top = `${circleY}px`;
+// Initial position setup
+resetCirclePosition();
+
+// Recalculate circle position when window is resized
+window.addEventListener("resize", resetCirclePosition);
 
 
 function clearColorAtPosition(x, y) {
@@ -361,4 +381,5 @@ const showModal = () => {
 
 modalCloseButton.addEventListener("click", () => {
   window.location.reload();
+});
 });
